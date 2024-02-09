@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from typing import List
+from matchpredictor.predictors.alphabet_predictor import AlphabetPredictor
+from matchpredictor.predictors.home_outcome_predictor import train_home_outcome_predictor
 
 from flask import Flask
 
@@ -28,6 +30,8 @@ def build_model_provider(training_data: List[Result]) -> ModelProvider:
         Model("Offense simulator", train_offense_predictor(training_data, 10_000)),
         Model("Full simulator (fast)", train_offense_and_defense_predictor(training_data, 1_000)),
         Model("Full simulator", train_offense_and_defense_predictor(training_data, 10_000)),
+        Model("Alphabet", AlphabetPredictor()),
+        Model("Home Outcome Predictor",train_home_outcome_predictor(training_data))
         # The linear regression model uses scikit learn, so can cause issues on some machines
         # Model("Linear regression", train_regression_predictor(training_data))
     ])
